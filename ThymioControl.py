@@ -9,6 +9,8 @@ class ThymioControl(ABC):
         self.sim = self.client.getObject('sim')
         self.client.setStepping(True)
         self.timestep = self.sim.getSimulationTimeStep()
+        self.sim_speed=1
+        self.display=True
         self.handles={}
         self.names={'robot': ['/Thymio'], \
                 'prox': ['/Thymio/ProximityLeft','/Thymio/ProximityCenterLeft','/Thymio/ProximityCenter','/Thymio/ProximityCenterRight','/Thymio/ProximityRight','/Thymio/ProximityRearLeft','/Thymio/ProximityRearRight'], \
@@ -34,7 +36,7 @@ class ThymioControl(ABC):
         try:    
             collidingObjects,_,_,_=self.sim.getContactInfo(self.sim.handle_all,self.handles[body],0)        
             coll_ignore=[self.handles[x] for x in self.names['coll_ignore']]
-            in_collision = not all(x in coll_ignore.values() for x in collidingObjects)        
+            in_collision = not all(x in coll_ignore for x in collidingObjects)        
         except Exception as e:
             print("Error in collision check: ",e)
             return False
@@ -79,7 +81,7 @@ class ThymioControl(ABC):
         time.sleep(0.1)
         self.sim.startSimulation()
         self.sim.setInt32Param(self.sim.intparam_speedmodifier,int(self.sim_speed))
-        print(self.sim.setBoolParam(self.sim.boolparam_display_enabled,self.display))
+        self.sim.setBoolParam(self.sim.boolparam_display_enabled,self.display)
         
     
     @abstractmethod
@@ -93,7 +95,7 @@ class ThymioControl(ABC):
         pass
 
     @abstractmethod
-    def check_valid_state(self,state):        
+    def check_valid_state(self):        
         ''' Checks if the robot is in a valid state'''
         pass
 
