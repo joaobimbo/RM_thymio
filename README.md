@@ -5,7 +5,7 @@
 - Instructions:
   1. Open a simulation instance and load Arena_Empty.ttt
   2. Run RL_test and either:
-    - download existing model with ``model = DQN.load("move_robot_c")`` and run it or
+    - download existing model and run it with ``model = DQN.load("move_robot_c")`` or
     - learn a new policy with ``model.learn(total_timesteps=100000, log_interval=1)``
   
 -- Joao Bimbo
